@@ -19,15 +19,18 @@ export class data_esencial_no_pooling {
     public constructor()
     {
         this.log = new Logger();
-
-        // via singleton, accediendo a un solo pool tengo una conexiona la base de datos
     }
 
-    public getProducers() : Promise<any>
-    {
-        return sql.connect(sqlConfig).then((pool:any) => {
-            return pool.request()
-                .execute("get_producers")
-        })
-    }
+    public async getProducers(): Promise<any> {
+        try {
+          const connection = await sql.connect(sqlConfig);
+          const request = new sql.Request(connection);
+          const result = await request.execute('get_producers');
+          sql.close();
+          return result;
+        } catch (err) {
+          console.error('Error executing database query:', err);
+          throw err;
+        }
+      }
 }
