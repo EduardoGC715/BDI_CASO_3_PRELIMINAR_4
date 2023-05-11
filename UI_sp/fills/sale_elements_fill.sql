@@ -40,4 +40,3 @@ INSERT  INTO payment_methods(name)
 		('depósito de debito'),
 		('en efectivo (pagado en el retiro de compra');
 
-
