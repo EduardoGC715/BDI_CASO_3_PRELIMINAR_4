@@ -1,36 +1,81 @@
-import { Logger } from '../common'
-
-const sql = require('mssql')
+import { Logger } from '../common';
+import { Connection, Request } from 'tedious';
 
 const sqlConfig = {
-    user: "dbuser",
-    password: "123456789",
-    database: "Esencial Verde",
-    server: "localhost\\MSSQLSERVER",
+    server: "localhost",
     options: {
-      encrypt: true, 
-      trustServerCertificate: true 
+      database: "Esencial Verde",
+      encrypt: true,
+      trustServerCertificate: true,
+      rowCollectionOnDone: true,
+      rowCollectionOnRequestCompletion: true,
+      useColumnNames: true
+    },
+    authentication: {
+      type: "default",
+      options: {  
+        userName: "dbuser",
+        password: "123456789",
+      }
     }
-}
+  };
 
 export class data_esencial_no_pooling {
-    private log: Logger;
+  private static instance: data_esencial_no_pooling;
+  private connection: Connection;
+  private isConnected: boolean;
+  private log: Logger;
 
-    public constructor()
-    {
-        this.log = new Logger();
+  private constructor() {
+    this.connection = new Connection(sqlConfig);
+    this.isConnected = false;
+    this.log = new Logger();
+  }
+
+  public static getInstance(): data_esencial_no_pooling {
+    if (!data_esencial_no_pooling.instance) {
+      data_esencial_no_pooling.instance = new data_esencial_no_pooling();
     }
 
-    public async getProducers(): Promise<any> {
-        try {
-          const connection = await sql.connect(sqlConfig);
-          const request = new sql.Request(connection);
-          const result = await request.execute('get_producers');
-          sql.close();
-          return result;
-        } catch (err) {
-          console.error('Error executing database query:', err);
-          throw err;
+    return data_esencial_no_pooling.instance;
+  }
+
+  private connect(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.connection.on("connect", (err: Error) => {
+        if (err) {
+          reject(err);
+        } else {
+          this.isConnected = true;
+          console.log('Connected with connection without pooling');
+          resolve();
         }
+      });
+      this.connection.connect();
+    });
+  }
+
+  public async getProducers(): Promise<any> {
+    try {
+      if (!this.isConnected) {
+        // Check if the connection is already established
+        await this.connect();
       }
+
+      return new Promise<any>((resolve, reject) => {
+        const request = new Request('get_producers', (err: Error, rowCount: number, rows:any) => {
+          if (err) {
+            console.error('Error executing database query:', err);
+            reject(err);
+          } else {
+            resolve({rows});
+          }
+        });
+        this.connection.callProcedure(request);
+      });
+    } catch (err) {
+      console.error('Error executing getProducers:', err);
+      throw err;
+    }
+  }
 }

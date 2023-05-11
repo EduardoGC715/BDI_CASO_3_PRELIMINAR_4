@@ -38,40 +38,83 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.data_esencial_no_pooling = void 0;
 var common_1 = require("../common");
-var sql = require('mssql');
+var tedious_1 = require("tedious");
 var sqlConfig = {
-    user: "dbuser",
-    password: "123456789",
-    database: "Esencial Verde",
-    server: "localhost\\MSSQLSERVER",
+    server: "localhost",
     options: {
+        database: "Esencial Verde",
         encrypt: true,
-        trustServerCertificate: true
+        trustServerCertificate: true,
+        rowCollectionOnDone: true,
+        rowCollectionOnRequestCompletion: true,
+        useColumnNames: true
+    },
+    authentication: {
+        type: "default",
+        options: {
+            userName: "dbuser",
+            password: "123456789"
+        }
     }
 };
 var data_esencial_no_pooling = /** @class */ (function () {
     function data_esencial_no_pooling() {
+        this.connection = new tedious_1.Connection(sqlConfig);
+        this.isConnected = false;
         this.log = new common_1.Logger();
     }
+    data_esencial_no_pooling.getInstance = function () {
+        if (!data_esencial_no_pooling.instance) {
+            data_esencial_no_pooling.instance = new data_esencial_no_pooling();
+        }
+        return data_esencial_no_pooling.instance;
+    };
+    data_esencial_no_pooling.prototype.connect = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this.connection.on("connect", function (err) {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    _this.isConnected = true;
+                    console.log('Connected with connection without pooling');
+                    resolve();
+                }
+            });
+            _this.connection.connect();
+        });
+    };
     data_esencial_no_pooling.prototype.getProducers = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var connection, request, result, err_1;
+            var err_1;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, sql.connect(sqlConfig)];
+                        if (!!this.isConnected) return [3 /*break*/, 2];
+                        // Check if the connection is already established
+                        return [4 /*yield*/, this.connect()];
                     case 1:
-                        connection = _a.sent();
-                        request = new sql.Request(connection);
-                        return [4 /*yield*/, request.execute('get_producers')];
-                    case 2:
-                        result = _a.sent();
-                        sql.close();
-                        return [2 /*return*/, result];
+                        // Check if the connection is already established
+                        _a.sent();
+                        _a.label = 2;
+                    case 2: return [2 /*return*/, new Promise(function (resolve, reject) {
+                            var request = new tedious_1.Request('get_producers', function (err, rowCount, rows) {
+                                if (err) {
+                                    console.error('Error executing database query:', err);
+                                    reject(err);
+                                }
+                                else {
+                                    resolve({ rows: rows });
+                                }
+                            });
+                            _this.connection.callProcedure(request);
+                        })];
                     case 3:
                         err_1 = _a.sent();
-                        console.error('Error executing database query:', err_1);
+                        console.error('Error executing getProducers:', err_1);
                         throw err_1;
                     case 4: return [2 /*return*/];
                 }

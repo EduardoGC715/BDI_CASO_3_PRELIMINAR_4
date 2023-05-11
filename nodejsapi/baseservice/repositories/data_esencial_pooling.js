@@ -46,7 +46,7 @@ var sqlConfig = {
     server: "localhost\\MSSQLSERVER",
     pool: {
         max: 10,
-        min: 10,
+        min: 5,
         idleTimeoutMillis: 30000
     },
     options: {

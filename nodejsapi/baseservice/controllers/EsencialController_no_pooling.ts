@@ -28,7 +28,7 @@ export class EsencialController_no_pooling {
 
     public getProducers() : Promise<any> 
     {
-        const esencialdata = new data_esencial_no_pooling();
+        const esencialdata = data_esencial_no_pooling.getInstance();
         return esencialdata.getProducers();
     }
 }
