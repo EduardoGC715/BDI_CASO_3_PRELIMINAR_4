@@ -21,23 +21,14 @@ const sqlConfig = {
   };
 
 export class data_esencial_no_pooling {
-  private static instance: data_esencial_no_pooling;
   private connection: Connection;
   private isConnected: boolean;
   private log: Logger;
 
-  private constructor() {
+   constructor() {
     this.connection = new Connection(sqlConfig);
     this.isConnected = false;
     this.log = new Logger();
-  }
-
-  public static getInstance(): data_esencial_no_pooling {
-    if (!data_esencial_no_pooling.instance) {
-      data_esencial_no_pooling.instance = new data_esencial_no_pooling();
-    }
-
-    return data_esencial_no_pooling.instance;
   }
 
   private connect(): Promise<void> {
@@ -68,6 +59,7 @@ export class data_esencial_no_pooling {
             console.error('Error executing database query:', err);
             reject(err);
           } else {
+            this.connection.close();
             resolve({rows});
           }
         });

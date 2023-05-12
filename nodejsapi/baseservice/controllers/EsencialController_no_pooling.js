@@ -19,7 +19,7 @@ var EsencialController_no_pooling = /** @class */ (function () {
         return this.instance;
     };
     EsencialController_no_pooling.prototype.getProducers = function () {
-        var esencialdata = data_esencial_no_pooling_1.data_esencial_no_pooling.getInstance();
+        var esencialdata = new data_esencial_no_pooling_1.data_esencial_no_pooling;
         return esencialdata.getProducers();
     };
     return EsencialController_no_pooling;

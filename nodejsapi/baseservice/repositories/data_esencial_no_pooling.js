@@ -63,12 +63,6 @@ var data_esencial_no_pooling = /** @class */ (function () {
         this.isConnected = false;
         this.log = new common_1.Logger();
     }
-    data_esencial_no_pooling.getInstance = function () {
-        if (!data_esencial_no_pooling.instance) {
-            data_esencial_no_pooling.instance = new data_esencial_no_pooling();
-        }
-        return data_esencial_no_pooling.instance;
-    };
     data_esencial_no_pooling.prototype.connect = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
@@ -107,6 +101,7 @@ var data_esencial_no_pooling = /** @class */ (function () {
                                     reject(err);
                                 }
                                 else {
+                                    _this.connection.close();
                                     resolve({ rows: rows });
                                 }
                             });
