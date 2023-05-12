@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var bodyParser = require("body-parser"); //json
 var routes_1 = require("./routes/routes");
@@ -15,11 +15,11 @@ var App = /** @class */ (function () {
         this.express.use(bodyParser.urlencoded({ extended: false }));
     };
     App.prototype.routes = function () {
-        this.express.use('/api', routes_1["default"]);
+        this.express.use('/api', routes_1.default);
         this.express.use('*', function (req, res) {
             res.send("Request invalido");
         });
     };
     return App;
 }());
-exports["default"] = new App().express;
+exports.default = new App().express;

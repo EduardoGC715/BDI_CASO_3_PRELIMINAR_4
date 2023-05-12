@@ -59,8 +59,8 @@ export class data_esencial_no_pooling {
             console.error('Error executing database query:', err);
             reject(err);
           } else {
-            this.connection.close();
             resolve({rows});
+            this.connection.close();
           }
         });
         this.connection.callProcedure(request);

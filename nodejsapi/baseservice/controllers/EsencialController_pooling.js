@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.EsencialController_pooling = void 0;
 var common_1 = require("../common");
 var data_esencial_pooling_1 = require("../repositories/data_esencial_pooling");

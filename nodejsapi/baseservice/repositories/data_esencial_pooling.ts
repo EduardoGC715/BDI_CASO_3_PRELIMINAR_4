@@ -25,7 +25,6 @@ export class data_esencial_pooling {
   
     private constructor() {
       this.pool = new sql.ConnectionPool(sqlConfig);
-      //this.pool.connect();
       this.log = new Logger();
     }
     public static getInstance(): data_esencial_pooling {
