@@ -22,12 +22,10 @@ const sqlConfig = {
 
 export class data_esencial_no_pooling {
   private connection: Connection;
-  private isConnected: boolean;
   private log: Logger;
 
    constructor() {
     this.connection = new Connection(sqlConfig);
-    this.isConnected = false;
     this.log = new Logger();
   }
 
@@ -37,8 +35,7 @@ export class data_esencial_no_pooling {
         if (err) {
           reject(err);
         } else {
-          this.isConnected = true;
-          console.log('Connected with connection without pooling');
+          console.log('Connectedwithout connection pooling');
           resolve();
         }
       });
@@ -48,15 +45,11 @@ export class data_esencial_no_pooling {
 
   public async getProducers(): Promise<any> {
     try {
-      if (!this.isConnected) {
-        // Check if the connection is already established
         await this.connect();
-      }
-
       return new Promise<any>((resolve, reject) => {
         const request = new Request('get_producers', (err: Error, rowCount: number, rows:any) => {
           if (err) {
-            console.error('Error executing database query:', err);
+            console.error('Error:', err);
             reject(err);
           } else {
             resolve({rows});
@@ -66,7 +59,7 @@ export class data_esencial_no_pooling {
         this.connection.callProcedure(request);
       });
     } catch (err) {
-      console.error('Error executing getProducers:', err);
+      console.error('Error:', err);
       throw err;
     }
   }

@@ -10,7 +10,7 @@ const sqlConfig = {
     pool: {
         max: 10,
         min: 5,
-        idleTimeoutMillis: 30000
+        idleTimeoutMillis: 3000
     },
     options: {
       encrypt: true, 
@@ -27,13 +27,14 @@ export class data_esencial_pooling {
       this.pool = new sql.ConnectionPool(sqlConfig);
       this.log = new Logger();
     }
+
     public static getInstance(): data_esencial_pooling {
         if (!data_esencial_pooling.instance) {
             data_esencial_pooling.instance = new data_esencial_pooling();
         }
-
         return data_esencial_pooling.instance;
     }
+    
     public async getProducers(): Promise<any> {
       try {
         await this.pool.connect();
@@ -42,7 +43,7 @@ export class data_esencial_pooling {
         const result = await request.execute('get_producers');
         return result;
       } catch (err) {
-        console.error('Error executing database query:', err);
+        console.error('Error:', err);
         throw err;
       }
     }

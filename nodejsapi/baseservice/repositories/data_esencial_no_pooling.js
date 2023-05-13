@@ -60,7 +60,6 @@ var sqlConfig = {
 var data_esencial_no_pooling = /** @class */ (function () {
     function data_esencial_no_pooling() {
         this.connection = new tedious_1.Connection(sqlConfig);
-        this.isConnected = false;
         this.log = new common_1.Logger();
     }
     data_esencial_no_pooling.prototype.connect = function () {
@@ -71,8 +70,7 @@ var data_esencial_no_pooling = /** @class */ (function () {
                     reject(err);
                 }
                 else {
-                    _this.isConnected = true;
-                    console.log('Connected with connection without pooling');
+                    console.log('Connectedwithout connection pooling');
                     resolve();
                 }
             });
@@ -86,32 +84,28 @@ var data_esencial_no_pooling = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        if (!!this.isConnected) return [3 /*break*/, 2];
-                        // Check if the connection is already established
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.connect()];
                     case 1:
-                        // Check if the connection is already established
                         _a.sent();
-                        _a.label = 2;
-                    case 2: return [2 /*return*/, new Promise(function (resolve, reject) {
-                            var request = new tedious_1.Request('get_producers', function (err, rowCount, rows) {
-                                if (err) {
-                                    console.error('Error executing database query:', err);
-                                    reject(err);
-                                }
-                                else {
-                                    resolve({ rows: rows });
-                                    _this.connection.close();
-                                }
-                            });
-                            _this.connection.callProcedure(request);
-                        })];
-                    case 3:
+                        return [2 /*return*/, new Promise(function (resolve, reject) {
+                                var request = new tedious_1.Request('get_producers', function (err, rowCount, rows) {
+                                    if (err) {
+                                        console.error('Error:', err);
+                                        reject(err);
+                                    }
+                                    else {
+                                        resolve({ rows: rows });
+                                        _this.connection.close();
+                                    }
+                                });
+                                _this.connection.callProcedure(request);
+                            })];
+                    case 2:
                         err_1 = _a.sent();
-                        console.error('Error executing getProducers:', err_1);
+                        console.error('Error:', err_1);
                         throw err_1;
-                    case 4: return [2 /*return*/];
+                    case 3: return [2 /*return*/];
                 }
             });
         });

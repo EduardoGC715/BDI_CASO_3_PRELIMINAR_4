@@ -47,7 +47,7 @@ var sqlConfig = {
     pool: {
         max: 10,
         min: 5,
-        idleTimeoutMillis: 30000
+        idleTimeoutMillis: 3000
     },
     options: {
         encrypt: true,
@@ -83,7 +83,7 @@ var data_esencial_pooling = /** @class */ (function () {
                         return [2 /*return*/, result];
                     case 3:
                         err_1 = _a.sent();
-                        console.error('Error executing database query:', err_1);
+                        console.error('Error:', err_1);
                         throw err_1;
                     case 4: return [2 /*return*/];
                 }

@@ -46,13 +46,7 @@ var sequelize = new sequelize_1.Sequelize('Esencial Verde', 'dbuser', '123456789
 var data_esencial_ORM = /** @class */ (function () {
     function data_esencial_ORM() {
         this.log = new common_1.Logger();
-        sequelize.authenticate()
-            .then(function () {
-            console.log("Conexion a base OK");
-        })
-            .catch(function (error) {
-            console.log("Error en la conexion: " + error);
-        });
+        this.initializeModels();
     }
     data_esencial_ORM.getInstance = function () {
         if (!data_esencial_ORM.instance) {
@@ -60,19 +54,38 @@ var data_esencial_ORM = /** @class */ (function () {
         }
         return data_esencial_ORM.instance;
     };
+    data_esencial_ORM.prototype.initializeModels = function () {
+        this.ProducerModel = sequelize.define('producers', {
+            producer_id: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true },
+            address_id: sequelize_1.DataTypes.INTEGER,
+            name: sequelize_1.DataTypes.STRING,
+            env_score: sequelize_1.DataTypes.INTEGER,
+        });
+        this.AddressModel = sequelize.define('addresses', {
+            address_id: { type: sequelize_1.DataTypes.INTEGER, primaryKey: true },
+            zip_code: sequelize_1.DataTypes.STRING
+        });
+        this.AddressModel.hasMany(this.ProducerModel, { foreignKey: 'address_id' });
+        this.ProducerModel.belongsTo(this.AddressModel, { foreignKey: 'address_id' });
+    };
     data_esencial_ORM.prototype.getProducers = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, producers, metadata, err_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var producers, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, sequelize.query('EXEC get_producers')];
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.ProducerModel.findAll({
+                                limit: 1000,
+                                order: [['env_score', 'DESC']],
+                                attributes: ['name', 'env_score'],
+                                include: { model: this.AddressModel, attributes: ['address_id', 'zip_code'], required: true }
+                            })];
                     case 1:
-                        _a = _b.sent(), producers = _a[0], metadata = _a[1];
+                        producers = _a.sent();
                         return [2 /*return*/, producers];
                     case 2:
-                        err_1 = _b.sent();
+                        err_1 = _a.sent();
                         console.error('Error executing getProducers:', err_1);
                         throw err_1;
                     case 3: return [2 /*return*/];
