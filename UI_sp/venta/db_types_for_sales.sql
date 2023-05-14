@@ -1,4 +1,4 @@
-USE [Esencial Verde]
+USE [Esencial Verde];
 
 
 
@@ -18,8 +18,11 @@ CREATE TYPE paymentInfoType AS TABLE
 	channel varchar(150),
 	buyer varchar(150),
 	payment_method varchar(150),
-	currency char(3)
+	currency varchar(3)
 );
 
 
 
+
+
+DROP PROCEDURE product_sale_SP;

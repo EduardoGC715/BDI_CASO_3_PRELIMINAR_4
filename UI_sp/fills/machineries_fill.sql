@@ -7,7 +7,7 @@ USE [Esencial Verde];
 
 
 
--- control_words for currencies  fill--
+-- control_words for machineries  fill--
 -- INSERT statements for control_words table
 INSERT INTO control_words (control_word_id)
 VALUES 

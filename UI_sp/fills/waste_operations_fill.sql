@@ -1,12 +1,12 @@
 USE [Esencial Verde];
 
--- control_words for currencies  fill--
+-- control_words for materials  fill--
 -- INSERT statements for control_words table
-
-
 INSERT INTO control_words (control_word_id)
 SELECT TOP 100 ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) + 30
 FROM sys.objects a, sys.objects b;
+
+
 
 -- INSERT statements for traductions table
 
@@ -75,7 +75,7 @@ VALUES
 
 
 
--- Waste_operations fill --
+-- materials fill --
 WITH number_sequence AS (
   SELECT 1 as n
   UNION ALL
@@ -91,12 +91,14 @@ SELECT * from materials;
 
 
 
+-- control_words for waste_operations  fill--
+-- INSERT statements for control_words table
 INSERT INTO control_words (control_word_id)
 SELECT TOP 10 ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) + 130
 FROM sys.objects a, sys.objects b;
 
 
-
+-- INSERT statements for traductions table
 INSERT INTO traductions(control_word_id, language_id, traduction, [default])
 VALUES
 

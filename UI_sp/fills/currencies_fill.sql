@@ -2,11 +2,6 @@ USE [Esencial Verde];
 
 
 
-
--- languages fill--
-
-
-
 -- control_words for currencies  fill--
 -- INSERT statements for control_words table
 INSERT INTO control_words (control_word_id)
@@ -39,10 +34,7 @@ VALUES
 
 
 
--- wastes fill --
-
-
-
+-- currencies fill --
 INSERT INTO currencies (control_word_id, abreviation, symbol, exchange_rate)
 VALUES 
     (11, 'USD', '$', 541.57),

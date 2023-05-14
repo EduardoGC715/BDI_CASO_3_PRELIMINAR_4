@@ -1,5 +1,6 @@
 USE [Esencial Verde];
 
+-- balances fill  for producers-- 
 WITH number_sequence AS (
 SELECT 1 as n
 UNION ALL
@@ -14,7 +15,7 @@ OPTION (MAXRECURSION 32767);
 
 
 
-
+-- balances fill  for alt_collectors-- 
 WITH number_sequence AS (
 SELECT 1 as n
 UNION ALL
@@ -28,7 +29,7 @@ FROM number_sequence
 OPTION (MAXRECURSION 32767);
 
 
-
+-- balances fill  for esencial verde-- 
 INSERT INTO balances (amount, created_at, updated_at, computer, username, checksum, isEsencial) 
 VALUES 
 	(0, GETDATE(),  GETDATE(), 'me', 'root', HASHBYTES('SHA2_256', 'hola mundo'), 1);

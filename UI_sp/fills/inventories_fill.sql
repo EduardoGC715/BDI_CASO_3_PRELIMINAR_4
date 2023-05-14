@@ -1,11 +1,14 @@
 USE [Esencial Verde];
 
 
+-- insert control_words for products fill --
 INSERT INTO control_words (control_word_id)
 SELECT TOP 4860 ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) + 140
 FROM sys.objects a, sys.objects b;
 
 
+
+-- traductions fill --
 WITH number_sequence AS (
   SELECT 141 as n
   UNION ALL
@@ -20,7 +23,7 @@ OPTION (MAXRECURSION 32767)
 SELECT * from materials;
 
 
--- container_types fill --
+-- products fill --
 WITH number_sequence AS (
   SELECT 1 as n
   UNION ALL
@@ -34,17 +37,8 @@ FROM number_sequence
 OPTION (MAXRECURSION 32767);
 
 
-SELECT * from products order by product_id DESC;
 
-
-
-
-
---Inventories--
-
-
-
-
+--materials_inventories fill--
 WITH number_sequence AS (
   SELECT 1 as n
   UNION ALL
@@ -57,12 +51,7 @@ SELECT CEILING((RAND(CHECKSUM(NEWID())) * 30000)),  CEILING(RAND(CHECKSUM(NEWID(
 FROM number_sequence
 OPTION (MAXRECURSION 32767);
 
-
-SELECT * from materials_inventories order by material_id ASC;
-
-
-
-
+--products_inventories fill--
 WITH number_sequence AS (
   SELECT 1 as n
   UNION ALL
@@ -75,5 +64,3 @@ SELECT CEILING((RAND(CHECKSUM(NEWID())) * 30000)),  CEILING(RAND(CHECKSUM(NEWID(
 FROM number_sequence
 OPTION (MAXRECURSION 32767);
 
-
-SELECT * from products_inventories order by product_id ASC;

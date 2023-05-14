@@ -22,7 +22,7 @@ VALUES
 
 
 
-	-- Insert traductions words for invoice type ids -- 
+-- Insert traductions words for invoice type ids -- 
 INSERT INTO invoice_types(control_word_id)
 VALUES 
     (24),
@@ -32,7 +32,7 @@ VALUES
 
 
 
-
+-- Insert payment_methods -- 
 INSERT  INTO payment_methods(name) 
 	VALUES	
 		('tarjeta de credito'),
