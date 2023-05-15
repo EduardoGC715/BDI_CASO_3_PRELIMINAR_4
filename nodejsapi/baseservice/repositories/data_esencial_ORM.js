@@ -86,7 +86,7 @@ var data_esencial_ORM = /** @class */ (function () {
                         return [2 /*return*/, producers];
                     case 2:
                         err_1 = _a.sent();
-                        console.error('Error executing getProducers:', err_1);
+                        console.error('Error:', err_1);
                         throw err_1;
                     case 3: return [2 /*return*/];
                 }
